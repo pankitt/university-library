@@ -47,7 +47,7 @@ const ImageUpload = ({ onFileChange }: Props) => {
 
     try {
       // const { signature, token, expire } = await authenticator();
-      const authRes = await fetch(`${config.env.apiEndpoint}/api/auth/imagekit`);
+      const authRes = await fetch('/api/auth/imagekit');
       if (!authRes.ok) throw new Error('Failed to fetch auth parameters');
       const { signature, token, expire } = await authRes.json();
 

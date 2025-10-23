@@ -103,7 +103,7 @@ const AuthForm = <T extends FieldValues>({ type, schema, defaultValues, onSubmit
       </Form>
 
       <p className="text-center text-sm font-medium">
-        {isSignIn ? "Don't have an account?" : 'Already have an account? '}
+        {isSignIn ? "Don't have an account? " : 'Already have an account? '}
         <Link
           href={isSignIn ? '/sign-up' : '/sign-in'}
           className="underline font-bold text-primary"
