@@ -1,4 +1,3 @@
-// src/components/SendTestEmailButton.tsx
 'use client';
 
 import { toast } from 'sonner';
@@ -7,18 +6,18 @@ import { sendTestEmail } from '@/lib/actions/sendTestEmail';
 
 export function SendTestEmailButton() {
   const handleClick = async () => {
-    const result = await sendTestEmail();
-
-    if (result.ok) {
-      toast.success('✅ Email sent successfully');
-    } else {
-      toast.error(`❌ Failed: ${result.error}`);
+    try {
+      await sendTestEmail();
+      toast.success('Email sent successfully ✅');
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : 'Server unreachable ❌';
+      toast.error(message);
     }
   };
 
   return (
     <Button onClick={handleClick} variant="default">
-      Send Test Email
+      Test Letter
     </Button>
   );
 }

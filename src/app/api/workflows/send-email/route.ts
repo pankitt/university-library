@@ -4,38 +4,23 @@ import config from '@/lib/config';
 
 const resend = new Resend(config.env.resendToken);
 
+type EmailPayload = {
+  from: string;
+  to: string;
+  subject: string;
+  html: string;
+};
+
 export async function POST(req: Request) {
+  const body: EmailPayload = await req.json();
+
+  if (!body.from || !body.to || !body.subject || !body.html) {
+    return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+  }
+
   try {
-    const body = await req.json();
-
-    const { from, to, subject, html, text, cc, bcc, replyTo } = body;
-
-    if (!from || !to || !subject || !html) {
-      return NextResponse.json(
-        { success: false, error: 'Missing required fields: from, to, subject, html' },
-        { status: 400 }
-      );
-    }
-
-    const result = await resend.emails.send({
-      from,
-      to,
-      subject,
-      html,
-      text,
-      cc,
-      bcc,
-      replyTo
-    });
-
-    if (!result?.data?.id) {
-      return NextResponse.json(
-        { success: false, error: result?.error || 'Resend failed' },
-        { status: 500 }
-      );
-    }
-
-    return NextResponse.json({ success: true, result: result.data }, { status: 200 });
+    const result = await resend.emails.send(body);
+    return NextResponse.json({ success: true, result }, { status: 200 });
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
